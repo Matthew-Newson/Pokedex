@@ -1,16 +1,6 @@
-import requests
-import sys
-import urllib.request
-from PIL import Image
-from matplotlib import pyplot as plot
-from deep_translator import GoogleTranslator
 import json
 
-
-
-
-
-
+import requests
 api = ("https://pokeapi.co/api/v2/pokemon/pikachu")
 x = requests.get(api).ok
 if(x):
@@ -43,6 +33,7 @@ def loginmenu():
        register()
    else:
        print("Invalid option shutting down")
+       import sys
        sys.exit()
 
     
@@ -70,23 +61,26 @@ def searchmenu():
        pokisearch()
    else:
        print("Invalid option shutting down")
+       import sys
        sys.exit()
 
 
 def register():
-   Username = input("What is your username? ")
-   Password = input("What do you want your password to be? ")
-   Passwordcheck = input("Please enter your password again")
+   Username = input("What is your username: ")
+   Password = input("What do you want your password to be: ")
+   Passwordcheck = input("Please enter your password again: ")
    if Username in texts:
     while Username in texts:
        Username = input("Username already in use please try again: ")
    if Password != Passwordcheck:
       while Password != Passwordcheck:
-         Password = input("Your passwords did not match please try again ")
-         Passwordcheck = input("Please enter your password again")
+         Password = input("Your passwords did not match please try again: ")
+         Passwordcheck = input("Please enter your password again: ")
    with open("login.json", "w")as f:
     texts[Username] = {"Username": Username, "Password": Password}
     json.dump(texts,f)
+    stop = input("Please press enter to continue")
+   loginmenu() 
         
       
 
@@ -97,6 +91,7 @@ def login():
    if user in texts:
        if user == (texts[user]["Username"]) and password == (texts[user]["Password"]):
            print(f"Welcome {user}")
+           stop = input("Please press enter to continue")
            searchmenu()
        else:
            print("Username or password incorrect")
@@ -112,6 +107,8 @@ def pokiteam():
 
 
 def pokeimg(pokimane):
+   from PIL import Image
+   from matplotlib import pyplot as plot
    pokipik = pokimane["sprites"]["front_default"]
    resp = requests.get(pokipik, verify=False)
    with open(f"{pokimane['name']}.png", 'wb') as f:
@@ -124,6 +121,7 @@ def pokeimg(pokimane):
 
 
 def pokeabilities(poki,abilities):
+   from deep_translator import GoogleTranslator
    print(f"{poki}'s abilities are:")
    for i, ability in enumerate(abilities):
        print(f"{i}: {ability['ability']['name']}")
